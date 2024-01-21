@@ -10,7 +10,7 @@ Part two is a Houdini Digital Asset ("HDA") with accompanying python module sour
 It's only been built and tested on Gentoo Linux so far! I expect it might need some adaptation to work on some linuxes or windows/mac.
 
 ## Motivation
-I am a GIANT fan of the demoscene (http://www.pouet.net) and tracked music (https://modarchive.org/) discovering Scream Tracker by The Future Crew back in 1992 or so, and I wrote a bunch of wierd old tracks myself, some of which I still rather like and I've always wanted to be able to make detailed and tightly synchronised visualisations for them.. producing something like a cross between a YT visualiser and a demoscene production, but not necessarily realtime. That's the motivation for this project!
+I am a huge fan of the demoscene (http://www.pouet.net) and tracked music (https://modarchive.org/) discovering Scream Tracker by The Future Crew back in 1992 or so, and I wrote a bunch of wierd old tracks myself, some of which I still rather like and I've always wanted to be able to make detailed and tightly synchronised visualisations for them.. producing something like a cross between a YT visualiser and a demoscene production, but not necessarily realtime. That's the motivation for this project!
 
 ## The HDA
 The HDA runs the modified `openmpt123` binary (once told its location) to produce a flac audio rendering of the specified tracker-music module file (later also transcoded to wav using assumed-system-level availability of ffmpeg!), and simultaneously records a 'pattern log' text-file via the command's standard text output (stdout) and redirecting stdout via a pipe (`>`) to a file. The pattern-log records in reasonable temporal-detail: Millisecond precision for the moment - what pattern rows were played and when.
@@ -30,3 +30,5 @@ The HDA also contains several prototype visualiser sop subnetworks:
 ## Youtube Link(s):
 Many more kinds of visualisation are planned, but see my YouTube channel 'DanWills' for further examples, here's a recent one:
 https://www.youtube.com/watch?v=4WMXwquRiWE
+
+I'll also do a 'how to use this' desktop recording with voice-over before long too.
