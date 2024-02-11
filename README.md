@@ -25,6 +25,13 @@ Similarly to the python file, The HDA file can be copied into the houdini settin
 
 It is also possible to install the HDA into the current hip session without copying it anywhere, but be aware it will need to stay in that location in order for it to continue to be found when opening the hipfile. If that's a concern one way out of it is to unlock the HDA before saving, or to turn on the option in Asset Manager->Configuration to embed HDAs into hipfiles.
 
+### Using the HDA:
+The 'Module File' parameter can be used to specify which track you want to import, you should check the 'Output Dir' parameter before pressing any buttons however, and make sure it's somewhere it's ok to write stuff. Additionally the 'OpenMPT Executable' parm should be filled out with the path to the openmpt123 executable file that was built. The 'Add to LD Library Path' parm should be pointed at the directory containing the executable too, so that it can find its shared-libs. Once all of that is done, you can press the 'Write Outputs' button to write a flac and transcode it to wav (assuming system-wide availability of ffmpeg) and additionally a 'pattern-log' file.
+
+Once that's done the audio can be added to the Houdini timeline by specifying a Chop node inside the hda as the 'realtime' audio source in the 'Audio Panel'. An example path for the Chop might be /obj/openmpt_import/chopnet1/AUDIO_OUT if the HDA was instantiated directly in /obj. There is a 'Get Length' button along with a 'Set Hip' button to get the playbar set to the correct length (occasionally the result still seems to need adjustment).
+
+The pattern data can then be imported by pressing the 'Read Pattern Log' button, which creates lots of other data on the HDA node, that is read and used by the visualisers.
+
 ### Visualisers
 
 The HDA also contains several prototype visualiser sop subnetworks:
