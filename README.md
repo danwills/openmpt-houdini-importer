@@ -3,7 +3,7 @@
 ## Intro
 This is a two-part project:
 
-Part one is a modified `openmpt123` executable binary - something that usually ships with an OpenMPT distribution, (here, the hpp and cpp files are provided which you'll need to swap-in and then build the binary using the provided build system).
+Part one is a modified `openmpt123` executable binary - something that usually ships with an OpenMPT distribution, (here, the hpp and cpp files are provided which you'll need to swap-in and then build the binary using the build system that comes with OpenMPT).
 
 Part two is a Houdini Digital Asset ("HDA") with accompanying python module source, that is intended to allow one to 'import' tracker-module music files into Houdini for lots of fun visualising the music! 
 
