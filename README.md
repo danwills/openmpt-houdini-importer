@@ -18,7 +18,7 @@ The HDA runs the modified `openmpt123` binary (once told its location) to produc
 The HDA then does a rough kind of 'parsing' of each line in the pattern log.. and some additional processing like tracking when the last note-hit in a channel was, and then saves it all as a bunch of keyframes in various parms and multiparms on the HDA.
 
 ### Python Module
-The file openmptImport.py needs to go somewhere on the python path. For Houdini this includes the 'Houdini settings' area in the user's homedir, like ~/houdini20.0/python3.10libs. One can create this subdirectory if it does not exist and copy the python file there, which should make it available for import in Houdini (you will need to restart the session if the directory did not previously exist). Note that for older Houdini versions the directory might be named a different python version like 'python2.7libs'.
+The file openmptImport.py needs to go somewhere on the python path. For Houdini this includes the 'Houdini settings' area in the user's homedir, like ~/houdini20.0/python3.10libs. You can create this subdirectory if it does not exist and copy the python file there, which should make it available for import in Houdini (you will need to restart the session if the directory did not previously exist). Note that for older Houdini versions the directory might be named a different python version like 'python2.7libs'.
 
 ### Installing the HDA:
 Similarly to the python file, The HDA file can be copied into the houdini settings area in your home directory, but in this case into the 'otls/' subdirectory like ~/houdini20.0/otls (the example assumes you're on Houdini 20.0, update accordingly to whatever version you are using if on a different version). 
