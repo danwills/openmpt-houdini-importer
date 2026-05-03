@@ -943,23 +943,17 @@ static void draw_channel_meters( concat_stream<mpt::ustring> & log, float peak_l
 
 template < typename Tsample, typename Tmod >
 void render_loop( commandlineflags & flags, Tmod & mod, double & duration, textout & log, write_buffers_interface & audio_stream ) {
-	
-	//log << MPT_USTRING("render_loop now") << lf;
+
 	log.writeout();
 
 	std::size_t bufsize;
 	if ( flags.mode == Mode::UI ) {
-		//log << MPT_USTRING("UI mode") << lf;
 		bufsize = std::min( flags.ui_redraw_interval, flags.period ) * flags.samplerate / 1000;
 	} else if ( flags.mode == Mode::Batch ) {
-		//log << MPT_USTRING("Batch mode") << lf;
 		bufsize = flags.period * flags.samplerate / 1000;
 	} else {
-		//log << MPT_USTRING("Else mode?") << lf;
 		bufsize = 1024;
 	}
-	
-	//log << MPT_USTRING("Buffer size is now: ") << bufsize << lf;
 
 	std::int64_t last_redraw_frame = std::int64_t{0} - flags.ui_redraw_interval;
 	std::int64_t rendered_frames = 0;
@@ -986,7 +980,6 @@ void render_loop( commandlineflags & flags, Tmod & mod, double & duration, texto
 		flags.show_pattern = true;
 	}
 	
-	// log << MPT_USTRING("Multiline is now: ") << multiline << lf;
 	log.writeout();
 	
 	const bool narrow = (flags.terminal_width < 72) && (flags.terminal_height > 25) && !flags.pattern_time_log;
@@ -995,7 +988,6 @@ void render_loop( commandlineflags & flags, Tmod & mod, double & duration, texto
 	int pattern_lines = 0;
 	
 	if ( multiline ) {
-		//log << MPT_USTRING("Multiline block.. ") << lf;
 		lines += 1;
 		// cppcheck-suppress identicalInnerCondition
 		if ( flags.show_ui ) {
@@ -1028,9 +1020,7 @@ void render_loop( commandlineflags & flags, Tmod & mod, double & duration, texto
 		if ( flags.show_progress ) {
 			lines += 1;
 		}
-		//log << MPT_USTRING("Got down to show_pattern check.. ") << lf;
 		if ( flags.show_pattern ) {
-			//log << MPT_USTRING("show_pattern TRUE!") << lf;
 			if ( flags.pattern_time_log ) {
 				pattern_lines = 1;
 				lines = 1;
@@ -1213,8 +1203,6 @@ void render_loop( commandlineflags & flags, Tmod & mod, double & duration, texto
 				for ( std::int32_t line = 0; line < pattern_lines; ++line ) {
 					std::int32_t row = mod.get_current_row() - ( pattern_lines / 2 ) + line;
 					
-					//mpt::ustring pattern_str;// = get_pattern_str( mod, row, width );
-					
 					if ( row == mod.get_current_row() ) {
 						if (!flags.pattern_time_log) {
 							log << MPT_USTRING(">");
@@ -1222,7 +1210,6 @@ void render_loop( commandlineflags & flags, Tmod & mod, double & duration, texto
 					} else {
 						log << MPT_USTRING(" ");
 					}
-					
 					if ( row < 0 || row >= mod.get_pattern_num_rows( mod.get_current_pattern() ) ) {
 						for ( std::int32_t channel = 0; channel < mod.get_num_channels(); ++channel ) {
 							if ( width >= 3 ) {
@@ -1234,14 +1221,13 @@ void render_loop( commandlineflags & flags, Tmod & mod, double & duration, texto
 						}
 					} else {
 						mpt::ustring new_pattern_str;
-						//TODO: make including this a mode! might mess up regular pattern drawing!
+						// Only happens when pattern time log is enabled so should not disturb normal-mode!
 						if (flags.pattern_time_log) {
 							int order = mod.get_current_order();
 							new_pattern_str += align_right<mpt::ustring>( MPT_UCHAR(':'), 3, order) + MPT_USTRING("/");
 						}
 							
 						new_pattern_str += align_right<mpt::ustring>( MPT_UCHAR(':'), 3, row) + MPT_USTRING(" ");
-						
 						for ( std::int32_t channel = 0; channel < mod.get_num_channels(); ++channel ) {
 							if ( width >= 3 ) {
 								// width >= 3 is always the case in pattern-time-log mode.
@@ -1251,48 +1237,26 @@ void render_loop( commandlineflags & flags, Tmod & mod, double & duration, texto
 									 new_pattern_str += MPT_USTRING(":");
 								}
 							}
-							new_pattern_str += mpt::transcode<mpt::ustring>( libopenmpt_encoding, 
-							                                                 mod.format_pattern_row_channel( mod.get_current_pattern(), 
-																                                             row, 
-																								             channel, 
-																								             width >= 3 ? width - 1 : width ) );																				 
+							new_pattern_str += mpt::transcode<mpt::ustring>( 
+								libopenmpt_encoding, 
+								mod.format_pattern_row_channel( 
+									mod.get_current_pattern(), 
+									row, 
+									channel, 
+									width >= 3 ? width - 1 : width ) 
+								);																				 
 						}
-						//log << lf << MPT_USTRING("PatternString: ") << new_pattern_str;
 						
 						if ( new_pattern_str != pattern_str || !flags.pattern_time_log) {
-							//log << MPT_USTRING("PAT_NEW!");
 							pat_new=true;
 							pattern_str = new_pattern_str;
 						} else {
 							pat_new=false;
 						}
 						
-						//if (flags.pattern_time_log) {
-						//	if (pattern_str != prev_str) {
-						//		log << pattern_str;
-						//	}
-						//} else {
-						//	log << pattern_str;
-						//}
-						//log << align_right<mpt::ustring>( MPT_UCHAR(':'), 3, row);
 						if ( pat_new ) {
 							log << pattern_str;
 						}
-						//for ( std::int32_t channel = 0; channel < mod.get_num_channels(); ++channel ) {
-						//	if ( width >= 3 ) {
-						//		// width >= 3 is always the case in pattern-time-log mode.
-						//		if ( row == mod.get_current_row() ) {
-						//			log << MPT_USTRING("+");
-						//		} else {
-						//			log << MPT_USTRING(":");
-						//		}
-						//	}
-						//	log << mpt::transcode<mpt::ustring>( libopenmpt_encoding, 
-						//	                                     mod.format_pattern_row_channel( mod.get_current_pattern(), 
-						//										                                 row, 
-						//																		 channel, 
-						//																		 width >= 3 ? width - 1 : width ) );
-						//}
 					}
 					if ( width >= 3 ) {
 						if ( !flags.pattern_time_log ) {
@@ -1372,11 +1336,9 @@ void render_loop( commandlineflags & flags, Tmod & mod, double & duration, texto
 					}
 				}
 			}
-			
 			if ( flags.show_progress ) {
 				log << MPT_USTRING("Position...: ") << seconds_to_string( mod.get_position_seconds() ) << MPT_USTRING(" / ") << seconds_to_string( duration ) << MPT_USTRING("   ") << lf;
 			}
-			
 		} else if ( flags.show_channel_meters ) {
 			if ( flags.show_ui || flags.show_details || flags.show_progress ) {
 				int width = ( flags.terminal_width - 3 ) / mod.get_num_channels();
@@ -1540,8 +1502,6 @@ static void probe_mod_file( commandlineflags & flags, const mpt::native_path & f
 template < typename Tmod >
 void render_mod_file( commandlineflags & flags, const mpt::native_path & filename, std::uint64_t filesize, Tmod & mod, textout & log, write_buffers_interface & audio_stream ) {
 
-	// log << MPT_USTRING("render_mod_file begins..") << lf;
-
 	log.writeout();
 
 	if ( flags.mode != Mode::Probe && flags.mode != Mode::Info ) {
@@ -1692,8 +1652,6 @@ static void probe_file( commandlineflags & flags, const mpt::native_path & filen
 }
 
 static void render_file( commandlineflags & flags, const mpt::native_path & filename, textout & log, write_buffers_interface & audio_stream ) {
-	
-	//log << MPT_USTRING("render_file now") << lf;
 	log.writeout();
 
 	std::ostringstream silentlog;
@@ -1760,9 +1718,6 @@ static mpt::native_path get_random_filename( std::set<mpt::native_path> & filena
 
 
 static void render_files( commandlineflags & flags, textout & log, write_buffers_interface & audio_stream, std::default_random_engine & prng ) {
-	
-	// log << MPT_USTRING("render_files starting") << lf;
-	
 	if ( flags.randomize ) {
 		std::shuffle( flags.filenames.begin(), flags.filenames.end(), prng );
 	}
@@ -2503,14 +2458,11 @@ static int main( int argc, char * argv [] ) {
 			} break;
 			case Mode::UI:
 			case Mode::Batch: {
-				//log << MPT_USTRING("UI or BATCH MODE") << lf;
 				if ( flags.use_stdout ) {
 					flags.apply_default_buffer_sizes();
 					stdout_stream_raii stdout_audio_stream;
 					render_files( flags, log, stdout_audio_stream, prng );
 				} else if ( !flags.output_filename.empty() ) {
-					//log << MPT_USTRING("FILENAME MODE") << lf;
-
 					flags.apply_default_buffer_sizes();
 					file_audio_stream_raii file_audio_stream( flags, flags.output_filename, log );
 					render_files( flags, log, file_audio_stream, prng );
@@ -2548,7 +2500,6 @@ static int main( int argc, char * argv [] ) {
 				}
 			} break;
 			case Mode::Render: {
-				//log << MPT_USTRING("RENDER MODE") << lf;
 				for ( const auto & filename : flags.filenames ) {
 					flags.apply_default_buffer_sizes();
 					file_audio_stream_raii file_audio_stream( flags, filename + MPT_NATIVE_PATH(".") + flags.output_extension, log );
