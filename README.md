@@ -46,7 +46,9 @@ The HDA also contains several prototype visualiser sop subnetworks:
 
 ## Youtube Link(s):
 Many more kinds of visualisation are planned, but see my YouTube channel 'DanWills' for further examples, here's a few recent ones:
+
 https://youtu.be/kfcrU2l-1ls?si=rm7n-tTnZNP0b34X
+
 https://www.youtube.com/watch?v=4WMXwquRiWE
 
 I'll also endeavour to do a 'how to use this' desktop recording with voice-over before long too.
